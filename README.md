@@ -32,6 +32,24 @@ export default () => (
 > private 仓库的 git 依赖靠 `gh auth git-credential` 认证（本机已配好）。
 > CI 里需要注入有 `repo` 权限的 token，见各项目 `.github/workflows/`。
 
+## 安装说明
+
+```bash
+bun install
+```
+
+`package.json` 里的 `"trustedDependencies": []` 是**故意的，别删**：
+tscircuit 的依赖树里带了 `sharp`，它的 postinstall 会去 GitHub Releases 下载
+预编译 libvips，国内网络经常中断并退化成源码编译（需要 Visual Studio），
+直接把 `bun install` 的退出码搞成 1、CI 就红了。
+
+实测 `sharp` 只是可选依赖——tscircuit 的 PNG / 3D 渲染并不依赖它
+（本仓库出图正常，`node_modules/sharp` 压根不存在）。所以显式挡掉它的安装脚本，
+安装日志会显示 `Blocked 1 postinstall`，这是预期结果。
+
+万一以后确实需要 sharp 的二进制：把 `trustedDependencies` 改成 `["sharp"]`，
+仓库里的 `.env` 会自动提供 npmmirror 镜像地址。
+
 ## 发版
 
 板级项目引用的是 **tag**，所以改完要让别人用上，必须打 tag：
