@@ -2,7 +2,7 @@
   "name": "@mytscircuit/lib",
   "version": "0.1.0",
   "private": true,
-  "description": "可复用的 tscircuit 元件与子电路库（StatusLed、Ldo3v3）",
+  "description": "Reusable tscircuit components and subcircuits (StatusLed, Ldo3v3)",
   "main": "./src/index.tsx",
   "types": "./src/index.tsx",
   "exports": {

@@ -1,32 +1,29 @@
-import type { CommonLayoutProps } from "tscircuit"
-
-export interface StatusLedProps extends CommonLayoutProps {
-  /**
-   * 指示灯实例名。同时作为内部元件命名的前缀，
-   * 因此在同一块板内必须唯一（例如 "PWR"、"BLINK"）。
-   */
-  name: string
-  /** 限流电阻阻值，默认 330Ω */
-  resistance?: string
-  /** LED 颜色 */
-  color?: "red" | "green" | "blue" | "yellow" | "white"
-  /** LED 封装，默认 0603 */
-  ledFootprint?: string
-  /** 限流电阻封装，默认 0402 */
-  resistorFootprint?: string
-  /** LED 阳极所连网络，需带 net. 前缀，例如 "net.OUT" */
-  positiveNet: string
-  /** LED 阴极所连网络，默认接地 */
-  negativeNet?: string
-}
-
 /**
- * 电源/状态指示灯：一颗限流电阻串联一颗 LED。
+ * Power/status indicator: one current-limiting resistor in series with one LED.
  *
  * ```tsx
  * <StatusLed name="PWR" color="green" positiveNet="net.VCC" />
  * ```
  */
+import type { CommonLayoutProps } from "tscircuit"
+
+export interface StatusLedProps extends CommonLayoutProps {
+  /** Instance name; also the refdes prefix of the internal parts, unique per board (e.g. "PWR") */
+  name: string
+  /** Current-limiting resistance, default 330 ohm */
+  resistance?: string
+  /** LED color */
+  color?: "red" | "green" | "blue" | "yellow" | "white"
+  /** LED footprint, default 0603 */
+  ledFootprint?: string
+  /** Resistor footprint, default 0402 */
+  resistorFootprint?: string
+  /** Net tied to the LED anode, with the net. prefix, e.g. "net.OUT" */
+  positiveNet: string
+  /** Net tied to the LED cathode, default ground */
+  negativeNet?: string
+}
+
 export const StatusLed = ({
   name,
   resistance = "330",
@@ -41,7 +38,6 @@ export const StatusLed = ({
 
   return (
     <group name={name} {...layout}>
-      {/* 位号前缀必须符合类型约定：电阻 R_*、LED D_* */}
       <resistor
         name={`R_${name}`}
         resistance={resistance}
